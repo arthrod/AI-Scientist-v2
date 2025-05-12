@@ -2,6 +2,7 @@ import warnings
 from datetime import datetime
 import numpy as np
 import time  # Add at the top with other imports
+from security import safe_requests
 
 warnings.filterwarnings("ignore", category=UserWarning)
 
@@ -45,7 +46,6 @@ login(token=os.environ["HF_TOKEN"])
 ## Example: load a pre-trained model, use it to extract features from images, and calculate the similarity score between two images
 from transformers import pipeline
 from PIL import Image
-import requests
 
 # Set device to GPU if available
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -59,8 +59,8 @@ img_urls = [
     "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/cats.png",
     "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/cats.jpeg",
 ]
-image_real = Image.open(requests.get(img_urls[0], stream=True).raw).convert("RGB")
-image_gen = Image.open(requests.get(img_urls[1], stream=True).raw).convert("RGB")
+image_real = Image.open(safe_requests.get(img_urls[0], stream=True).raw).convert("RGB")
+image_gen = Image.open(safe_requests.get(img_urls[1], stream=True).raw).convert("RGB")
 outputs = pipe([image_real, image_gen])
 similarity_score = cosine_similarity(
     torch.Tensor(outputs[0]), torch.Tensor(outputs[1]), dim=1

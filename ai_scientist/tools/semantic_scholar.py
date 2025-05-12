@@ -7,6 +7,7 @@ from typing import Dict, List, Optional, Union
 import backoff
 
 from ai_scientist.tools.base_tool import BaseTool
+from security import safe_requests
 
 
 def on_backoff(details: Dict) -> None:
@@ -62,7 +63,7 @@ class SemanticScholarSearchTool(BaseTool):
         if self.S2_API_KEY:
             headers["X-API-KEY"] = self.S2_API_KEY
         
-        rsp = requests.get(
+        rsp = safe_requests.get(
             "https://api.semanticscholar.org/graph/v1/paper/search",
             headers=headers,
             params={
@@ -114,7 +115,7 @@ def search_for_papers(query, result_limit=10) -> Union[None, List[Dict]]:
     if not query:
         return None
     
-    rsp = requests.get(
+    rsp = safe_requests.get(
         "https://api.semanticscholar.org/graph/v1/paper/search",
         headers=headers,
         params={
