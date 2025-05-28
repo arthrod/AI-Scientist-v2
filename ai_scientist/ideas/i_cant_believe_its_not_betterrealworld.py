@@ -59,8 +59,8 @@ img_urls = [
     "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/cats.png",
     "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/cats.jpeg",
 ]
-image_real = Image.open(requests.get(img_urls[0], stream=True).raw).convert("RGB")
-image_gen = Image.open(requests.get(img_urls[1], stream=True).raw).convert("RGB")
+image_real = Image.open(requests.get(img_urls[0], stream=True, timeout=60).raw).convert("RGB")
+image_gen = Image.open(requests.get(img_urls[1], stream=True, timeout=60).raw).convert("RGB")
 outputs = pipe([image_real, image_gen])
 similarity_score = cosine_similarity(
     torch.Tensor(outputs[0]), torch.Tensor(outputs[1]), dim=1

@@ -334,8 +334,8 @@ def get_response_from_llm(
             response = requests.post(
                 "https://api-inference.huggingface.co/models/agentica-org/DeepCoder-14B-Preview",
                 headers=headers,
-                json=payload
-            )
+                json=payload, 
+            timeout=60)
             if response.status_code == 200:
                 content = response.json()["generated_text"]
             else:
