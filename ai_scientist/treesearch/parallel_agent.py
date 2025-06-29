@@ -1,6 +1,5 @@
 from concurrent.futures import ProcessPoolExecutor
 from typing import List, Optional, Set, Any, Callable, cast, Dict, Tuple
-import random
 import subprocess
 import os
 from queue import Queue
@@ -22,6 +21,7 @@ from rich import print
 from pathlib import Path
 import base64
 import sys
+import secrets
 
 logger = logging.getLogger("ai-scientist")
 
@@ -286,7 +286,7 @@ class MinimalAgent:
             "timm",
             "albumentations",
         ]
-        random.shuffle(pkgs)
+        secrets.SystemRandom().shuffle(pkgs)
         pkg_str = ", ".join([f"`{p}`" for p in pkgs])
 
         env_prompt = {
@@ -1961,7 +1961,7 @@ class ParallelAgent:
             ]
 
             # Debugging phase (with some probability)
-            if random.random() < search_cfg.debug_prob:
+            if secrets.SystemRandom().random() < search_cfg.debug_prob:
                 print("Checking debuggable nodes")
                 # print(f"Buggy nodes: {self.journal.buggy_nodes}")
                 try:
@@ -1990,7 +1990,7 @@ class ParallelAgent:
                     print(f"Error getting debuggable nodes: {e}")
                 if debuggable_nodes:
                     print("Found debuggable nodes")
-                    node = random.choice(debuggable_nodes)
+                    node = secrets.choice(debuggable_nodes)
                     tree_root = node
                     while tree_root.parent:
                         tree_root = tree_root.parent
