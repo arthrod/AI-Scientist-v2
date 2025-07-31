@@ -20,6 +20,7 @@ from ai_scientist.tools.semantic_scholar import search_for_papers
 
 from ai_scientist.perform_vlm_review import generate_vlm_img_review
 from ai_scientist.vlm import create_client as create_vlm_client
+from security import safe_command
 
 
 def remove_accents_and_clean(s):
@@ -48,8 +49,7 @@ def compile_latex(cwd, pdf_file, timeout=30):
 
     for command in commands:
         try:
-            result = subprocess.run(
-                command,
+            result = safe_command.run(subprocess.run, command,
                 cwd=cwd,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
@@ -98,8 +98,7 @@ def detect_pages_before_impact(latex_folder, timeout=30):
         ]
         for command in commands:
             try:
-                subprocess.run(
-                    command,
+                safe_command.run(subprocess.run, command,
                     cwd=temp_dir,
                     stdout=subprocess.PIPE,
                     stderr=subprocess.PIPE,
