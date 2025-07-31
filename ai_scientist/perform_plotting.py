@@ -15,6 +15,7 @@ from ai_scientist.perform_icbinb_writeup import (
     load_exp_summaries,
     filter_experiment_summaries,
 )
+from security import safe_command
 
 MAX_FIGURES = 12
 
@@ -111,8 +112,7 @@ def run_aggregator_script(
 
     aggregator_out = ""
     try:
-        result = subprocess.run(
-            [sys.executable, script_name],
+        result = safe_command.run(subprocess.run, [sys.executable, script_name],
             cwd=base_folder,
             check=True,
             stdout=subprocess.PIPE,
